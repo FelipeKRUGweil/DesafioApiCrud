@@ -1,0 +1,26 @@
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: SgbrSistemas
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - CONNECTION_STRING=postgresql://postgres:admin@db:5432/SgbrSistemas
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+
+volumes:
+  db_data:
